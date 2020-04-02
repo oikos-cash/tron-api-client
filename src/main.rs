@@ -1,6 +1,7 @@
 // https://tronprotocol.github.io/documentation-en/api/http/#fullnode-api
 // https://developers.tron.network/reference#wallets-accounts
 
+/*
 use std::collections::HashMap;
 
 #[tokio::main]
@@ -12,3 +13,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("{:#?}", resp);
     Ok(())
 }
+*/
+
+fn main() {}

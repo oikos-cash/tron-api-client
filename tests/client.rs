@@ -155,10 +155,7 @@ async fn movie_updates() {
     let movie_updates = client.movie_updates(since).await;
 
     if movie_updates.is_err() {
-        panic!(
-            "Error fetching movie updates: {:?}",
-            movie_updates.unwrap_err()
-        );
+        panic!( "Error fetching movie updates: {:?}", movie_updates.unwrap_err());
     }
 }
 */
