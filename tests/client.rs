@@ -2,7 +2,7 @@
 // use lazy_static::lazy_static;
 // use tokio::sync::{Mutex, MutexGuard};
 
-use tron_api_client::{Client, Address, TxId};
+use tron_api_client::{Address, Client, TxId};
 
 // mod data;
 
@@ -18,7 +18,7 @@ async fn node_info() {
     let client = get_client();
 
     let info = client
-        .node_info()
+        .get_node_info()
         .await
         .expect("Error fetching node info");
     // dbg!(info);
@@ -51,7 +51,9 @@ async fn get_account() {
     let client = get_client();
 
     let info = client
-        .get_account(Address::Hex("41E552F6487585C2B58BC2C9BB4492BC1F17132CD0".into()))
+        .get_account(Address::Hex(
+            "41E552F6487585C2B58BC2C9BB4492BC1F17132CD0".into(),
+        ))
         .await
         .expect("Error fetching account");
 }
@@ -61,7 +63,9 @@ async fn get_account_2() {
     let client = get_client();
 
     let info = client
-        .get_account(Address::Hex("41a8a07f09def5e6a4462df90068c11abf6224e865".into()))
+        .get_account(Address::Hex(
+            "41a8a07f09def5e6a4462df90068c11abf6224e865".into(),
+        ))
         .await
         .expect("Error fetching account");
 }
@@ -81,7 +85,9 @@ async fn get_transaction_by_id() {
     let client = get_client();
 
     let info = client
-        .get_transaction_by_id(TxId("809e9d9aa5381f32f748618e4d592a58542e21fe794f35959ce811f2a58fc969".into()))
+        .get_transaction_by_id(TxId(
+            "809e9d9aa5381f32f748618e4d592a58542e21fe794f35959ce811f2a58fc969".into(),
+        ))
         .await
         .expect("Error fetching tx by id");
 }
@@ -91,7 +97,9 @@ async fn get_transaction_info_by_id() {
     let client = get_client();
 
     let info = client
-        .get_transaction_info_by_id(TxId("809e9d9aa5381f32f748618e4d592a58542e21fe794f35959ce811f2a58fc969".into()))
+        .get_transaction_info_by_id(TxId(
+            "809e9d9aa5381f32f748618e4d592a58542e21fe794f35959ce811f2a58fc969".into(),
+        ))
         .await
         .expect("Error fetching tx info by id");
 }
@@ -106,6 +114,15 @@ async fn get_now_block() {
         .expect("Error fetching now block");
 }
 
+#[tokio::test]
+async fn get_chain_parameters() {
+    let client = get_client();
+
+    let info = client
+        .get_chain_parameters()
+        .await
+        .expect("Error fetching chain parameters");
+}
 
 // 809e9d9aa5381f32f748618e4d592a58542e21fe794f35959ce811f2a58fc969
 
@@ -147,7 +164,6 @@ async fn series() {
 }
 */
 
-
 /*
 #[tokio::test]
 async fn series_filter() {
@@ -172,7 +188,6 @@ async fn series_filter() {
     assert_eq!(series, *PEII);
 }
 */
-
 
 /*
 #[tokio::test]
@@ -242,4 +257,3 @@ async fn movie_updates() {
     }
 }
 */
-

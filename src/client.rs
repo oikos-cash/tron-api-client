@@ -1,10 +1,10 @@
-use reqwest::{Client as HttpClient, Method, RequestBuilder, Response};
-use url::Url;
-use crate::response::{NodeInfo, Block, Account, Transaction, TransactionInfo};
-use serde::{de::DeserializeOwned, Serialize};
-use crate::params::*;
 use crate::error::{Error, Result};
+use crate::params::*;
+use crate::response::{Account, Block, ChainParameters, NodeInfo, Transaction, TransactionInfo};
+use reqwest::{Client as HttpClient, Method, RequestBuilder, Response};
+use serde::{de::DeserializeOwned, Serialize};
 use serde_json;
+use url::Url;
 
 #[derive(Debug)]
 pub struct Client {
@@ -15,30 +15,28 @@ pub struct Client {
 
 pub enum Address {
     Base58(String),
-    Hex(String)
+    Hex(String),
 }
 pub struct TxId(pub String);
 
 async fn decode_response<T>(res: Response) -> Result<T>
 where
-    T: DeserializeOwned
+    T: DeserializeOwned,
 {
     let data = res.text().await?;
     // dbg!(&data);
 
-    let s: T = serde_json::from_str(&data).map_err(|orig_err| {
-        match serde_json::from_str(&data) {
+    let s: T =
+        serde_json::from_str(&data).map_err(|orig_err| match serde_json::from_str(&data) {
             Err(_) => {
                 dbg!(&data);
                 orig_err.into()
-            },
-            Ok(r) => Error::ServerError(r)
-        }
-    })?;
+            }
+            Ok(r) => Error::ServerError(r),
+        })?;
 
     Ok(s)
 }
-
 
 impl Client {
     pub fn new(base_url: String) -> Self {
@@ -49,34 +47,61 @@ impl Client {
     }
     // todo: for_network(shasta) -> Client (uses trongrid.io api url for shasta
 
-    async fn post<T, U>(&self, path: &str, param: U) -> Result<T>
+    async fn req<T, U>(&self, path: &str, method: Method, body: U) -> Result<T>
     where
         T: DeserializeOwned,
-        U: Serialize
+        U: Serialize,
     {
-        let res = self
-            .prep_req(Method::POST, self.get_url(path))
-            .await?
-            .json(&param)
-            .send()
-            .await?;
+        let res = match method {
+            Method::GET => {
+                self.prep_req(method, self.get_url(path))
+                    .await?
+                    .send()
+                    .await?
+            }
+            Method::POST => {
+                self.prep_req(method, self.get_url(path))
+                    .await?
+                    .json(&body)
+                    .send()
+                    .await?
+            }
+            _ => unimplemented!(),
+        };
         decode_response::<T>(res).await
     }
 
-    pub async fn node_info(&self) -> Result<NodeInfo> {
-        let res = self
-            .prep_req(Method::GET, self.node_info_url())
-            .await?
-            .send()
-            .await?;
-        decode_response::<NodeInfo>(res).await
+    async fn post<T, U>(&self, path: &str, param: U) -> Result<T>
+    where
+        T: DeserializeOwned,
+        U: Serialize,
+    {
+        self.req(path, Method::POST, param).await
+    }
+
+    async fn get<T>(&self, path: &str) -> Result<T>
+    where
+        T: DeserializeOwned,
+    {
+        self.req(path, Method::GET, EmptyBody::default()).await
+    }
+
+    pub async fn get_node_info(&self) -> Result<NodeInfo> {
+        self.get("/wallet/getnodeinfo").await
+    }
+
+    pub async fn get_chain_parameters(&self) -> Result<ChainParameters> {
+        self.get("/wallet/getchainparameters").await
     }
 
     pub async fn get_block_by_num(&self, num: u32) -> Result<Block> {
-        self.post("/wallet/getblockbynum", GetBlockByNumParams::new(num)).await
+        self.post("/wallet/getblockbynum", GetBlockByNumParams::new(num))
+            .await
     }
-pub async fn get_block_by_id(&self, id: &str) -> Result<Block> {
-        self.post("/wallet/getblockbyid", GetBlockByIdParams::new(id.into())).await
+
+    pub async fn get_block_by_id(&self, id: &str) -> Result<Block> {
+        self.post("/wallet/getblockbyid", GetBlockByIdParams::new(id.into()))
+            .await
     }
 
     pub async fn get_now_block(&self) -> Result<Block> {
@@ -97,15 +122,24 @@ pub async fn get_block_by_id(&self, id: &str) -> Result<Block> {
     // TODO
 
     pub async fn get_account(&self, address: Address) -> Result<Account> {
-        self.post("/walletsolidity/getaccount", GetAccountParams::new(address)).await
+        self.post("/walletsolidity/getaccount", GetAccountParams::new(address))
+            .await
     }
 
     pub async fn get_transaction_by_id(&self, tx_id: TxId) -> Result<Transaction> {
-        self.post("/wallet/gettransactionbyid", GetTransactionParams::new(tx_id)).await
+        self.post(
+            "/wallet/gettransactionbyid",
+            GetTransactionParams::new(tx_id),
+        )
+        .await
     }
 
     pub async fn get_transaction_info_by_id(&self, tx_id: TxId) -> Result<TransactionInfo> {
-        self.post("/wallet/gettransactioninfobyid", GetTransactionParams::new(tx_id)).await
+        self.post(
+            "/wallet/gettransactioninfobyid",
+            GetTransactionParams::new(tx_id),
+        )
+        .await
     }
 
     async fn prep_req(&self, method: Method, url: Url) -> Result<RequestBuilder> {
@@ -116,15 +150,7 @@ pub async fn get_block_by_id(&self, id: &str) -> Result<Block> {
         Ok(req)
     }
 
-    fn node_info_url(&self) -> Url {
-        self.base_url
-            .join("/wallet/getnodeinfo")
-            .expect("could not parse nodeinfo")
-    }
-
     fn get_url(&self, path: &str) -> Url {
-        self.base_url
-            .join(path)
-            .expect("could not parse url")
+        self.base_url.join(path).expect("could not parse url")
     }
 }
