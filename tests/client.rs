@@ -87,6 +87,16 @@ async fn get_transaction_by_id() {
 }
 
 #[tokio::test]
+async fn get_transaction_info_by_id() {
+    let client = get_client();
+
+    let info = client
+        .get_transaction_info_by_id(TxId("809e9d9aa5381f32f748618e4d592a58542e21fe794f35959ce811f2a58fc969".into()))
+        .await
+        .expect("Error fetching tx info by id");
+}
+
+#[tokio::test]
 async fn get_now_block() {
     let client = get_client();
 
@@ -94,7 +104,6 @@ async fn get_now_block() {
         .get_now_block()
         .await
         .expect("Error fetching now block");
-    dbg!(info);
 }
 
 

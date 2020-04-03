@@ -1,6 +1,6 @@
 use reqwest::{Client as HttpClient, Method, RequestBuilder, Response};
 use url::Url;
-use crate::response::{NodeInfo, Block, Account, Transaction};
+use crate::response::{NodeInfo, Block, Account, Transaction, TransactionInfo};
 use serde::{de::DeserializeOwned, Serialize};
 use crate::params::*;
 use crate::error::{Error, Result};
@@ -28,7 +28,10 @@ where
 
     let s: T = serde_json::from_str(&data).map_err(|orig_err| {
         match serde_json::from_str(&data) {
-            Err(_) => orig_err.into(),
+            Err(_) => {
+                dbg!(&data);
+                orig_err.into()
+            },
             Ok(r) => Error::ServerError(r)
         }
     })?;
@@ -72,13 +75,12 @@ impl Client {
     pub async fn get_block_by_num(&self, num: u32) -> Result<Block> {
         self.post("/wallet/getblockbynum", GetBlockByNumParams::new(num)).await
     }
-
-    pub async fn get_block_by_id(&self, id: &str) -> Result<Block> {
+pub async fn get_block_by_id(&self, id: &str) -> Result<Block> {
         self.post("/wallet/getblockbyid", GetBlockByIdParams::new(id.into())).await
     }
 
     pub async fn get_now_block(&self) -> Result<Block> {
-        self.post("/walletsolidity/getnowblock", EmptyBody::default()).await
+        self.post("/wallet/getnowblock", EmptyBody::default()).await
     }
 
     // TODO:
@@ -102,6 +104,9 @@ impl Client {
         self.post("/wallet/gettransactionbyid", GetTransactionParams::new(tx_id)).await
     }
 
+    pub async fn get_transaction_info_by_id(&self, tx_id: TxId) -> Result<TransactionInfo> {
+        self.post("/wallet/gettransactioninfobyid", GetTransactionParams::new(tx_id)).await
+    }
 
     async fn prep_req(&self, method: Method, url: Url) -> Result<RequestBuilder> {
         let req = self
