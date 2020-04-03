@@ -1,10 +1,10 @@
-mod account;
-mod block;
-mod chain_parameters;
-mod error;
-mod node_info;
-mod transaction;
-mod transaction_info;
+pub mod account;
+pub mod block;
+pub mod chain_parameters;
+pub mod error;
+pub mod node_info;
+pub mod transaction;
+pub mod transaction_info;
 
 pub use account::Account;
 pub use block::Block;
