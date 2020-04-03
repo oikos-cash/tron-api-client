@@ -1,7 +1,7 @@
-use reqwest::{header::HeaderValue, Client as HttpClient, Method, RequestBuilder, Response};
+use reqwest::{Client as HttpClient, Method, RequestBuilder, Response};
 use url::Url;
-use crate::response::{NodeInfo, Block, Error as ResponseError};
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use crate::response::{NodeInfo, Block, Account};
+use serde::{de::DeserializeOwned, Serialize};
 use crate::params::*;
 use crate::error::{Error, Result};
 use serde_json;
@@ -27,15 +27,21 @@ fn api_errors(res: &Response) -> Result<()> {
 }
 */
 
+pub enum Address {
+    Base58(String),
+    Hex(String)
+}
+
 async fn decode_response<T>(res: Response) -> Result<T>
 where
     T: DeserializeOwned
 {
     let data = res.text().await?;
+    dbg!(&data);
 
-    let s: T = serde_json::from_str(&data).map_err(|_| {
+    let s: T = serde_json::from_str(&data).map_err(|orig_err| {
         match serde_json::from_str(&data) {
-            Err(err) => err.into(),
+            Err(_) => orig_err.into(),
             Ok(r) => Error::ServerError(r)
         }
     })?;
@@ -82,6 +88,23 @@ impl Client {
 
     pub async fn get_block_by_id(&self, id: &str) -> Result<Block> {
         self.post("/wallet/getblockbyid", GetBlockByIdParams::new(id.into())).await
+    }
+
+    // TODO:
+    // walletgetblockbylatestnum
+    // getblockbylimitnext
+    // createtransaction
+    // getnowblock
+    // listnodes
+    // gettransactioninfobyid
+    // gettransactionbyid
+    // getchainparameters
+    // etc...
+
+    // TODO
+
+    pub async fn get_account(&self, address: Address) -> Result<Account> {
+        self.post("/walletsolidity/getaccount", GetAccountParams::new(address)).await
     }
 
     /*
@@ -146,12 +169,6 @@ impl Client {
     fn node_info_url(&self) -> Url {
         self.base_url
             .join("/wallet/getnodeinfo")
-            .expect("could not parse nodeinfo")
-    }
-
-    fn get_block_by_num_url(&self) -> Url {
-        self.base_url
-            .join("/wallet/getblockbynum")
             .expect("could not parse nodeinfo")
     }
 

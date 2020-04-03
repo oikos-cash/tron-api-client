@@ -2,7 +2,7 @@
 // use lazy_static::lazy_static;
 // use tokio::sync::{Mutex, MutexGuard};
 
-use tron_api_client::Client;
+use tron_api_client::{Client, Address};
 
 // mod data;
 
@@ -13,6 +13,7 @@ fn get_client() -> Client {
     client
 }
 
+/*
 #[tokio::test]
 async fn node_info() {
     let client = get_client();
@@ -31,7 +32,7 @@ async fn get_block_by_num() {
     let info = client
         .get_block_by_num(10)
         .await
-        .expect("Error fetching node info");
+        .expect("Error fetching block by num");
     // dbg!(info);
 }
 
@@ -42,7 +43,19 @@ async fn get_block_by_id() {
     let info = client
         .get_block_by_id("000000000000000a4efe701d7a03ff578104c6c1995ab70e713c30318b266e90")
         .await
-        .expect("Error fetching node info");
+        .expect("Error fetching block by id");
+    // dbg!(info);
+}
+*/
+
+#[tokio::test]
+async fn get_account() {
+    let client = get_client();
+
+    let info = client
+        .get_account(Address::Hex("41E552F6487585C2B58BC2C9BB4492BC1F17132CD0".into()))
+        .await
+        .expect("Error fetching account");
     dbg!(info);
 }
 

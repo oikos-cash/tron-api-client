@@ -1,3 +1,4 @@
+use crate::client::Address;
 use serde_derive::Serialize;
 
 /// Parameters used to get series images with
@@ -24,5 +25,25 @@ pub struct GetBlockByIdParams {
 impl GetBlockByIdParams {
     pub fn new(id: String) -> GetBlockByIdParams {
         GetBlockByIdParams { id }
+    }
+}
+
+#[derive(Debug, Default, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetAccountParams {
+    #[serde(rename = "address")]
+    address: String,
+    // true if address is in base58...
+    visible: bool,
+}
+
+impl GetAccountParams {
+    pub fn new(address: Address) -> GetAccountParams {
+        let (address, visible) = match address {
+            Address::Base58(addr) => (addr, true),
+            Address::Hex(addr) => (addr, false),
+        };
+
+        GetAccountParams { address, visible }
     }
 }
