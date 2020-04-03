@@ -145,6 +145,8 @@ impl Client {
             .await
     }
 
+    // TODO: retry if tron node returns an empty object `{}`?
+    // This happens when querying a TX in a recently mined block.
     pub async fn get_transaction_by_id(&self, tx_id: TxId) -> Result<Transaction> {
         self.post(
             "/wallet/gettransactionbyid",
