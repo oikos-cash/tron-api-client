@@ -154,5 +154,4 @@ async fn get_contract() {
         ))
         .await
         .expect("Error fetching contract");
-    dbg!(info);
 }
