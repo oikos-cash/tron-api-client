@@ -13,3 +13,16 @@ impl GetBlockByNumParams {
         GetBlockByNumParams { num }
     }
 }
+
+#[derive(Debug, Default, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetBlockByIdParams {
+    #[serde(rename = "value")]
+    id: String,
+}
+
+impl GetBlockByIdParams {
+    pub fn new(id: String) -> GetBlockByIdParams {
+        GetBlockByIdParams { id }
+    }
+}

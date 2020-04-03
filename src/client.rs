@@ -53,6 +53,20 @@ impl Client {
     }
     // todo: for_network(shasta) -> Client (uses trongrid.io api url for shasta
 
+    async fn post<T, U>(&self, path: &str, param: U) -> Result<T>
+    where
+        T: DeserializeOwned,
+        U: Serialize
+    {
+        let res = self
+            .prep_req(Method::POST, self.get_url(path))
+            .await?
+            .json(&param)
+            .send()
+            .await?;
+        decode_response::<T>(res).await
+    }
+
     pub async fn node_info(&self) -> Result<NodeInfo> {
         let res = self
             .prep_req(Method::GET, self.node_info_url())
@@ -63,14 +77,24 @@ impl Client {
     }
 
     pub async fn get_block_by_num(&self, num: u32) -> Result<Block> {
+        self.post("/wallet/getblockbynum", GetBlockByNumParams::new(num)).await
+    }
+
+    pub async fn get_block_by_id(&self, id: &str) -> Result<Block> {
+        self.post("/wallet/getblockbyid", GetBlockByIdParams::new(id.into())).await
+    }
+
+    /*
+    pub async fn get_block_by_id(&self, num: u32) -> Result<Block> {
         let res = self
-            .prep_req(Method::POST, self.get_block_by_num_url())
+            .prep_req(Method::POST, self.get_url("/wallet/get_block_by_id"))
             .await?
-            .json(&GetBlockByNumParams::new(num))
+            .json(&GetBlockByIdParams::new(num))
             .send()
             .await?;
         decode_response::<Block>(res).await
     }
+    */
 
     /*
     pub async fn series_into<T, I>(&self, id: I) -> Result<T>
@@ -129,6 +153,12 @@ impl Client {
         self.base_url
             .join("/wallet/getblockbynum")
             .expect("could not parse nodeinfo")
+    }
+
+    fn get_url(&self, path: &str) -> Url {
+        self.base_url
+            .join(path)
+            .expect("could not parse url")
     }
 
     /*
