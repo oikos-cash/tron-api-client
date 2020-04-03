@@ -1,6 +1,6 @@
 use reqwest::{Client as HttpClient, Method, RequestBuilder, Response};
 use url::Url;
-use crate::response::{NodeInfo, Block, Account};
+use crate::response::{NodeInfo, Block, Account, Transaction};
 use serde::{de::DeserializeOwned, Serialize};
 use crate::params::*;
 use crate::error::{Error, Result};
@@ -31,6 +31,7 @@ pub enum Address {
     Base58(String),
     Hex(String)
 }
+pub struct TxId(pub String);
 
 async fn decode_response<T>(res: Response) -> Result<T>
 where
@@ -105,6 +106,10 @@ impl Client {
 
     pub async fn get_account(&self, address: Address) -> Result<Account> {
         self.post("/walletsolidity/getaccount", GetAccountParams::new(address)).await
+    }
+
+    pub async fn get_transaction_by_id(&self, tx_id: TxId) -> Result<Transaction> {
+        self.post("/wallet/gettransactionbyid", GetTransactionParams::new(tx_id)).await
     }
 
     /*

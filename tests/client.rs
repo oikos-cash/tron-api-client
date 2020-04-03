@@ -2,7 +2,7 @@
 // use lazy_static::lazy_static;
 // use tokio::sync::{Mutex, MutexGuard};
 
-use tron_api_client::{Client, Address};
+use tron_api_client::{Client, Address, TxId};
 
 // mod data;
 
@@ -76,6 +76,18 @@ async fn get_account_2_base58() {
         .expect("Error fetching account");
 }
 
+#[tokio::test]
+async fn get_transaction_by_id() {
+    let client = get_client();
+
+    let info = client
+        .get_transaction_by_id(TxId("809e9d9aa5381f32f748618e4d592a58542e21fe794f35959ce811f2a58fc969".into()))
+        .await
+        .expect("Error fetching account");
+}
+
+
+// 809e9d9aa5381f32f748618e4d592a58542e21fe794f35959ce811f2a58fc969
 
 /*
 #[tokio::test]

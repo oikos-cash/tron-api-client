@@ -1,4 +1,4 @@
-use crate::client::Address;
+use crate::client::{Address, TxId};
 use serde_derive::Serialize;
 
 /// Parameters used to get series images with
@@ -45,5 +45,18 @@ impl GetAccountParams {
         };
 
         GetAccountParams { address, visible }
+    }
+}
+
+#[derive(Debug, Default, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetTransactionParams {
+    #[serde(rename = "value")]
+    id: String,
+}
+
+impl GetTransactionParams {
+    pub fn new(tx_id: TxId) -> GetTransactionParams {
+        GetTransactionParams { id: tx_id.0 }
     }
 }
