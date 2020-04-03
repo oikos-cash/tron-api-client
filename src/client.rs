@@ -13,20 +13,6 @@ pub struct Client {
     http_client: HttpClient,
 }
 
-/*
-// cannot count on http status... errors have following JSON with 200 status:
-// example:
-// body = "{\"Error\":\"class java.lang.NumberFormatException : null\"}\n"
-//
-fn api_errors(res: &Response) -> Result<()> {
-    match res.status().into() {
-        404 => Err(Error::NotFound),
-        500..=599 => Err(Error::ServerError),
-        _ => Ok(()),
-    }
-}
-*/
-
 pub enum Address {
     Base58(String),
     Hex(String)
@@ -38,7 +24,7 @@ where
     T: DeserializeOwned
 {
     let data = res.text().await?;
-    dbg!(&data);
+    // dbg!(&data);
 
     let s: T = serde_json::from_str(&data).map_err(|orig_err| {
         match serde_json::from_str(&data) {
@@ -91,6 +77,10 @@ impl Client {
         self.post("/wallet/getblockbyid", GetBlockByIdParams::new(id.into())).await
     }
 
+    pub async fn get_now_block(&self) -> Result<Block> {
+        self.post("/walletsolidity/getnowblock", EmptyBody::default()).await
+    }
+
     // TODO:
     // walletgetblockbylatestnum
     // getblockbylimitnext
@@ -112,64 +102,14 @@ impl Client {
         self.post("/wallet/gettransactionbyid", GetTransactionParams::new(tx_id)).await
     }
 
-    /*
-    pub async fn get_block_by_id(&self, num: u32) -> Result<Block> {
-        let res = self
-            .prep_req(Method::POST, self.get_url("/wallet/get_block_by_id"))
-            .await?
-            .json(&GetBlockByIdParams::new(num))
-            .send()
-            .await?;
-        decode_response::<Block>(res).await
-    }
-    */
-
-    /*
-    pub async fn series_into<T, I>(&self, id: I) -> Result<T>
-    where
-        I: Into<SeriesID>,
-        T: DeserializeOwned,
-    {
-        let res = self
-            .prep_lang_req(Method::GET, self.series_url(id.into()))
-            .await?
-            .send()
-            .await?;
-
-        api_errors(&res)?;
-
-        Ok(res.json::<ResponseData<T>>().await?.data)
-    }
-    */
-
 
     async fn prep_req(&self, method: Method, url: Url) -> Result<RequestBuilder> {
         let req = self
             .http_client
             .request(method, url)
             .header("Content-Type", "application/json");
-            /*
-            .bearer_auth(
-                &self
-                    .token
-                    .lock()
-                    .await
-                    .as_ref()
-                    .expect("missing token although ensured valid")
-                    .token,
-            );
-            */
-
         Ok(req)
     }
-
-    /*
-    fn login_url(&self) -> Url {
-        self.base_url
-            .join("/login")
-            .expect("could not parse login url")
-    }
-    */
 
     fn node_info_url(&self) -> Url {
         self.base_url
@@ -182,17 +122,4 @@ impl Client {
             .join(path)
             .expect("could not parse url")
     }
-
-    /*
-    fn series_url(&self, id: SeriesID) -> Url {
-        self.base_url
-            .join(&format!("/series/{}", id))
-            .expect("could not parse series url")
-    }
-    */
 }
-
-/*
-#[cfg(test)]
-mod tests;
-*/

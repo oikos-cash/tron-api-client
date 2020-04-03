@@ -1,4 +1,5 @@
 use crate::client::{Address, TxId};
+use serde::Serializer;
 use serde_derive::Serialize;
 
 /// Parameters used to get series images with
@@ -58,5 +59,16 @@ pub struct GetTransactionParams {
 impl GetTransactionParams {
     pub fn new(tx_id: TxId) -> GetTransactionParams {
         GetTransactionParams { id: tx_id.0 }
+    }
+}
+
+#[derive(Debug, Default)]
+pub struct EmptyBody {}
+impl serde::Serialize for EmptyBody {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str("")
     }
 }
