@@ -1,3 +1,5 @@
+use crate::response::Transaction;
+
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Block {
@@ -5,6 +7,8 @@ pub struct Block {
     pub block_id: String,
     #[serde(rename = "block_header")]
     pub block_header: BlockHeader,
+    #[serde(default)]
+    pub transactions: Vec<Transaction>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]

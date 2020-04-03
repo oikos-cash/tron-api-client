@@ -36,6 +36,17 @@ async fn get_block_by_num() {
 }
 
 #[tokio::test]
+async fn get_block_by_num_with_transactions() {
+    let client = get_client();
+
+    let info = client
+        .get_block_by_num(3412121)
+        .await
+        .expect("Error fetching block by num");
+    dbg!(info);
+}
+
+#[tokio::test]
 async fn get_block_by_id() {
     let client = get_client();
 
@@ -43,7 +54,6 @@ async fn get_block_by_id() {
         .get_block_by_id("000000000000000a4efe701d7a03ff578104c6c1995ab70e713c30318b266e90")
         .await
         .expect("Error fetching block by id");
-    // dbg!(info);
 }
 
 #[tokio::test]
