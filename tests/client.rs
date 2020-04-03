@@ -51,7 +51,7 @@ async fn get_block_by_num_with_transactions() {
         .get_block_by_num(3412121)
         .await
         .expect("Error fetching block by num");
-    dbg!(info);
+    // dbg!(info);
 }
 
 #[tokio::test]
@@ -154,5 +154,5 @@ async fn get_contract() {
         ))
         .await
         .expect("Error fetching contract");
-    println!("{:?}", info);
+    dbg!(info);
 }
