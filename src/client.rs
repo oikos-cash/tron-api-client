@@ -1,7 +1,7 @@
 use crate::error::{Error, Result};
 use crate::params::*;
 use crate::response::{
-    Account, Block, ChainParameters, NodeInfo, NodeList, Transaction, TransactionInfo,
+    Account, Block, ChainParameters, Contract, NodeInfo, NodeList, Transaction, TransactionInfo,
 };
 use reqwest::{Client as HttpClient, Method, RequestBuilder, Response};
 use serde::{de::DeserializeOwned, Serialize};
@@ -31,7 +31,8 @@ where
     let s: T =
         serde_json::from_str(&data).map_err(|orig_err| match serde_json::from_str(&data) {
             Err(_) => {
-                dbg!(&data);
+                println!("{}", data);
+                // dbg!(&data);
                 orig_err.into()
             }
             Ok(r) => Error::ServerError(r),
@@ -48,6 +49,18 @@ impl Client {
         }
     }
     // todo: for_network(shasta) -> Client (uses trongrid.io api url for shasta
+
+    async fn prep_req(&self, method: Method, url: Url) -> Result<RequestBuilder> {
+        let req = self
+            .http_client
+            .request(method, url)
+            .header("Content-Type", "application/json");
+        Ok(req)
+    }
+
+    fn get_url(&self, path: &str) -> Url {
+        self.base_url.join(path).expect("could not parse url")
+    }
 
     async fn req<T, U>(&self, path: &str, method: Method, body: U) -> Result<T>
     where
@@ -148,15 +161,8 @@ impl Client {
         .await
     }
 
-    async fn prep_req(&self, method: Method, url: Url) -> Result<RequestBuilder> {
-        let req = self
-            .http_client
-            .request(method, url)
-            .header("Content-Type", "application/json");
-        Ok(req)
-    }
-
-    fn get_url(&self, path: &str) -> Url {
-        self.base_url.join(path).expect("could not parse url")
+    pub async fn get_contract(&self, address: Address) -> Result<Contract> {
+        self.post("/wallet/getcontract", GetContractParams::new(address))
+            .await
     }
 }

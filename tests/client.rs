@@ -141,3 +141,18 @@ async fn get_chain_parameters() {
         .await
         .expect("Error fetching chain parameters");
 }
+
+// contract 417ca2c40d9aa986b6608e07a68ebf33ea5f19a866
+
+#[tokio::test]
+async fn get_contract() {
+    let client = get_client();
+
+    let info = client
+        .get_contract(Address::Hex(
+            "417ca2c40d9aa986b6608e07a68ebf33ea5f19a866".into(),
+        ))
+        .await
+        .expect("Error fetching contract");
+    println!("{:?}", info);
+}

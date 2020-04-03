@@ -72,3 +72,22 @@ impl serde::Serialize for EmptyBody {
         serializer.serialize_str("")
     }
 }
+
+#[derive(Debug, Default, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetContractParams {
+    #[serde(rename = "value")]
+    address: String,
+}
+
+impl GetContractParams {
+    pub fn new(address: Address) -> GetContractParams {
+        let address = match address {
+            Address::Base58(addr) => addr,
+            Address::Hex(addr) => addr,
+        };
+
+        GetContractParams { address }
+    }
+}
+
