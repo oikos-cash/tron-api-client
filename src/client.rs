@@ -1,6 +1,8 @@
 use crate::error::{Error, Result};
 use crate::params::*;
-use crate::response::{Account, Block, ChainParameters, NodeInfo, Transaction, TransactionInfo};
+use crate::response::{
+    Account, Block, ChainParameters, NodeInfo, NodeList, Transaction, TransactionInfo,
+};
 use reqwest::{Client as HttpClient, Method, RequestBuilder, Response};
 use serde::{de::DeserializeOwned, Serialize};
 use serde_json;
@@ -88,6 +90,10 @@ impl Client {
 
     pub async fn get_node_info(&self) -> Result<NodeInfo> {
         self.get("/wallet/getnodeinfo").await
+    }
+
+    pub async fn list_nodes(&self) -> Result<NodeList> {
+        self.get("/wallet/listnodes").await
     }
 
     pub async fn get_chain_parameters(&self) -> Result<ChainParameters> {

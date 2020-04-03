@@ -14,7 +14,7 @@ fn get_client() -> Client {
 }
 
 #[tokio::test]
-async fn node_info() {
+async fn get_node_info() {
     let client = get_client();
 
     let info = client
@@ -22,6 +22,14 @@ async fn node_info() {
         .await
         .expect("Error fetching node info");
     // dbg!(info);
+}
+
+#[tokio::test]
+async fn node_list() {
+    let client = get_client();
+
+    let info = client.list_nodes().await.expect("Error fetching node list");
+    dbg!(info);
 }
 
 #[tokio::test]
