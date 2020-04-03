@@ -1,41 +1,5 @@
 use std::collections::HashMap;
 
-/*
-#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
-#[cfg_attr(test, derive(Default))]
-// TODO: what does that mean? #[non_exhaustive]
-#[non_exhaustive]
-// TODO: what does this do?
-#[serde(rename_all = "camelCase")]
-pub struct NodeInfo {
-    /// Series aliases.
-    pub aliases: Vec<String>,
-    /// Path to the series' banner.
-    ///
-    /// Use [`banner_url`](#method.banner_url) for a full URL.
-    #[serde(deserialize_with = "ser::optional_string")]
-    pub banner: Option<String>,
-    /// Date when series was first aired.
-    #[serde(with = "ser::optional_naive_date")]
-    pub first_aired: Option<NaiveDate>,
-    /// ID of the series.
-    pub id: SeriesID,
-    /// The series' network.
-    #[serde(deserialize_with = "ser::optional_string")]
-    pub network: Option<String>,
-    /// Short description of the series.
-    pub overview: Option<String>,
-    /// Name of the series.
-    pub series_name: Option<String>,
-    /// Slug used to create the full [`website_url`](#method.website_url) for
-    /// this series.
-    pub slug: String,
-    /// Status of the series.
-    ///
-    /// See [`SeriesStatus`](./enum.SeriesStatus.html) for more info.
-    pub status: SeriesStatus,
-}
-*/
 // generated with https://transform.tools/json-to-rust-serde
 //
 
