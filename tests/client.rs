@@ -21,7 +21,17 @@ async fn node_info() {
         .node_info()
         .await
         .expect("Error fetching node info");
+    // dbg!(info);
+}
 
+#[tokio::test]
+async fn get_block_by_num() {
+    let client = get_client();
+
+    let info = client
+        .get_block_by_num(10)
+        .await
+        .expect("Error fetching node info");
     dbg!(info);
 }
 

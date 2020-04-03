@@ -1,7 +1,10 @@
 use reqwest::{header::HeaderValue, Client as HttpClient, Method, RequestBuilder, Response};
 use url::Url;
+use crate::response::{NodeInfo, Block, Error as ResponseError};
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use crate::params::*;
 use crate::error::{Error, Result};
-use crate::response::{NodeInfo};
+use serde_json;
 
 #[derive(Debug)]
 pub struct Client {
@@ -9,6 +12,37 @@ pub struct Client {
     // private_key: String,
     http_client: HttpClient,
 }
+
+/*
+// cannot count on http status... errors have following JSON with 200 status:
+// example:
+// body = "{\"Error\":\"class java.lang.NumberFormatException : null\"}\n"
+//
+fn api_errors(res: &Response) -> Result<()> {
+    match res.status().into() {
+        404 => Err(Error::NotFound),
+        500..=599 => Err(Error::ServerError),
+        _ => Ok(()),
+    }
+}
+*/
+
+async fn decode_response<T>(res: Response) -> Result<T>
+where
+    T: DeserializeOwned
+{
+    let data = res.text().await?;
+
+    let s: T = serde_json::from_str(&data).map_err(|_| {
+        match serde_json::from_str(&data) {
+            Err(err) => err.into(),
+            Ok(r) => Error::ServerError(r)
+        }
+    })?;
+
+    Ok(s)
+}
+
 
 impl Client {
     pub fn new(base_url: String) -> Self {
@@ -25,10 +59,17 @@ impl Client {
             .await?
             .send()
             .await?;
+        decode_response::<NodeInfo>(res).await
+    }
 
-        // api_errors(&res)?;
-
-        Ok(res.json::<NodeInfo>().await?)
+    pub async fn get_block_by_num(&self, num: u32) -> Result<Block> {
+        let res = self
+            .prep_req(Method::POST, self.get_block_by_num_url())
+            .await?
+            .json(&GetBlockByNumParams::new(num))
+            .send()
+            .await?;
+        decode_response::<Block>(res).await
     }
 
     /*
@@ -81,6 +122,12 @@ impl Client {
     fn node_info_url(&self) -> Url {
         self.base_url
             .join("/wallet/getnodeinfo")
+            .expect("could not parse nodeinfo")
+    }
+
+    fn get_block_by_num_url(&self) -> Url {
+        self.base_url
+            .join("/wallet/getblockbynum")
             .expect("could not parse nodeinfo")
     }
 

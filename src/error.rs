@@ -5,6 +5,8 @@ use std::error::Error as StdError;
 use std::fmt;
 use std::io::Error as IOError;
 
+use crate::response::Error as ResponseError;
+
 use chrono::format::ParseError as TimeParseError;
 //# use jsonwebtoken::errors::Error as JWTError;
 use reqwest::Error as ReqwestError;
@@ -33,7 +35,7 @@ pub enum Error {
     InvalidAPIKey,
 
     /// Occurs when TheTVDB API returns a `5XX` error response.
-    ServerError,
+    ServerError(ResponseError),
 
     /// Occurs when resources (series, episodes, etc...) are not found.
     NotFound,
@@ -81,7 +83,7 @@ impl fmt::Display for Error {
             HTTP(e) => write!(f, "HTTP error: {}", e),
             IO(e) => write!(f, "IO error: {}", e),
             InvalidAPIKey => write!(f, "Invalid API key"),
-            ServerError => write!(f, "API Server error"),
+            ServerError(e) => write!(f, "API Server error: {}", e.error),
             NotFound => write!(f, "Not found"),
             InvalidHTTPHeader(e) => write!(f, "Non-parsable HTTP header: {}", e),
             MissingLastModified => write!(f, "Last modified data missing"),
@@ -106,8 +108,8 @@ impl StdError for Error {
             InvalidDateFormat(e) => Some(e),
             InvalidUrl(e) => Some(e),
             InvalidAPIKey
-            | ServerError
             | NotFound
+            | ServerError(_)
             | MissingLastModified
             | MissingSeriesFilterKeys
             | MissingImage
