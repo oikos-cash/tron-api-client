@@ -13,7 +13,6 @@ fn get_client() -> Client {
     client
 }
 
-/*
 #[tokio::test]
 async fn node_info() {
     let client = get_client();
@@ -46,7 +45,6 @@ async fn get_block_by_id() {
         .expect("Error fetching block by id");
     // dbg!(info);
 }
-*/
 
 #[tokio::test]
 async fn get_account() {
@@ -56,10 +54,27 @@ async fn get_account() {
         .get_account(Address::Hex("41E552F6487585C2B58BC2C9BB4492BC1F17132CD0".into()))
         .await
         .expect("Error fetching account");
-    dbg!(info);
 }
 
+#[tokio::test]
+async fn get_account_2() {
+    let client = get_client();
 
+    let info = client
+        .get_account(Address::Hex("41a8a07f09def5e6a4462df90068c11abf6224e865".into()))
+        .await
+        .expect("Error fetching account");
+}
+
+#[tokio::test]
+async fn get_account_2_base58() {
+    let client = get_client();
+
+    let info = client
+        .get_account(Address::Base58("TRLpnm6Uz9s2Fcy3Q235k3SiAEBXGJCNq2".into()))
+        .await
+        .expect("Error fetching account");
+}
 
 
 /*

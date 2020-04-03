@@ -1,7 +1,7 @@
 #[derive(Default, Debug, Clone, PartialEq, serde_derive::Serialize, serde_derive::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Account {
-    #[serde(rename = "account_name")]
+    #[serde(rename = "account_name", default)]
     pub account_name: String,
     pub address: String,
     pub balance: i64,
