@@ -13,7 +13,7 @@ A Rust library for Tron's HTTP APIs.
 
 See [releases](https://github.com/kevholder/tron-api-client/releases).
 
-If you have Rust: `cargo install tron_api_client`.
+If you have Rust: `cargo install tron-api-client`.
 
 ## Usage
 
