@@ -40,6 +40,7 @@ async fn main() {
              default_value("main")
              possible_value[main]
              possible_value[shasta]
+             env("TRON_NETWORK")
             +takes_value
             "Specify tron network (uses trongrid.io)")
         (@subcommand get_node_info =>
