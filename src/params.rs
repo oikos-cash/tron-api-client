@@ -7,11 +7,11 @@ use serde_derive::Serialize;
 #[derive(Debug, Default, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct GetBlockByNumParams {
-    num: u32,
+    num: u64,
 }
 
 impl GetBlockByNumParams {
-    pub fn new(num: u32) -> GetBlockByNumParams {
+    pub fn new(num: u64) -> GetBlockByNumParams {
         GetBlockByNumParams { num }
     }
 }

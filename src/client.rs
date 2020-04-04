@@ -21,6 +21,11 @@ pub enum Address {
 }
 pub struct TxId(pub String);
 
+pub enum Network {
+    Main,
+    Shasta,
+}
+
 async fn decode_response<T>(res: Response) -> Result<T>
 where
     T: DeserializeOwned,
@@ -48,6 +53,24 @@ impl Client {
             http_client: HttpClient::new(),
         }
     }
+
+    pub fn for_network(network: Network) -> Self {
+        let base_url = match network {
+            Network::Shasta => "https://api.shasta.trongrid.io".to_string(),
+            Network::Main => "https://api.trongrid.io".to_string(),
+            _ => unimplemented!(),
+        };
+        Self::new(base_url)
+    }
+
+    pub fn for_shasta() -> Self {
+        Self::for_network(Network::Shasta)
+    }
+
+    pub fn for_main() -> Self {
+        Self::for_network(Network::Main)
+    }
+
     // todo: for_network(shasta) -> Client (uses trongrid.io api url for shasta
 
     async fn prep_req(&self, method: Method, url: Url) -> Result<RequestBuilder> {
@@ -113,7 +136,7 @@ impl Client {
         self.get("/wallet/getchainparameters").await
     }
 
-    pub async fn get_block_by_num(&self, num: u32) -> Result<Block> {
+    pub async fn get_block_by_num(&self, num: u64) -> Result<Block> {
         self.post("/wallet/getblockbynum", GetBlockByNumParams::new(num))
             .await
     }
