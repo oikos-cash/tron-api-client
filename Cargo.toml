@@ -4,6 +4,7 @@ version = "0.0.1"
 authors = ["Kevin Holder <kevholderx@gmail.com>"]
 description = "Tron API client and CLI"
 edition = "2018"
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
