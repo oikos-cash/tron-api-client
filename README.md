@@ -20,7 +20,6 @@ If you have Rust: `cargo install tron-api-client`.
 ```bash
 $ tron help
 tron 0.0.1
-Kevin Holder <kevholderx@gmail.com>
 Tron API client and CLI
 
 USAGE:
