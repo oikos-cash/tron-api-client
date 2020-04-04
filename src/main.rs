@@ -33,7 +33,7 @@ async fn main() {
     let app = clap_app!(myapp =>
         (name: "tron")
         (version: crate_version!())
-        (author: crate_authors!())
+        // (author: crate_authors!())
         (about: crate_description!())
         (@arg network:
             --network
