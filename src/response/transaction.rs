@@ -26,6 +26,10 @@ pub struct RawData {
     #[serde(rename = "ref_block_hash")]
     pub ref_block_hash: String,
     pub expiration: i64,
+    // we need default here because there is one known transaction that does not have the
+    // timestamp field.... WTF
+    // tron get_transaction_by_id 8b8e052a058b228a7aacc24e57bf328096fb6c8878cbd42cb226bf4c626377d8
+    #[serde(default)]
     pub timestamp: i64,
 }
 
