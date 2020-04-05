@@ -1,6 +1,6 @@
 [package]
 name = "tron-api-client"
-version = "0.0.3-alpha.0"
+version = "0.0.3"
 authors = ["Kevin Holder <kevholderx@gmail.com>"]
 description = "Tron API client and CLI"
 edition = "2018"
