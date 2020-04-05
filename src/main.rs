@@ -80,7 +80,7 @@ async fn main() {
             (@arg address: +required "Contract Address (hex format)")
         )
     )
-    .setting(clap::AppSettings::ArgRequiredElseHelp);
+    .setting(clap::AppSettings::SubcommandRequiredElseHelp);
 
     let matches = app.get_matches();
 
