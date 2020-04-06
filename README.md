@@ -18,12 +18,11 @@ If you have Rust: `cargo install tron-api-client`.
 ## Usage
 
 ```bash
-$ tron help
-tron 0.0.1
+tron 0.0.4-alpha.0
 Tron API client and CLI
 
 USAGE:
-    tron [OPTIONS] [SUBCOMMAND]
+    tron [OPTIONS] <SUBCOMMAND>
 
 FLAGS:
     -h, --help       Prints help information
@@ -35,6 +34,7 @@ OPTIONS:
 
 SUBCOMMANDS:
     get_account                   Get Account
+    get_account_net               Get Account Bandwidth
     get_block_by_id               Get Block by Id
     get_block_by_num              Get Block by Number
     get_chain_parameters          Get Chain Parameters
@@ -45,4 +45,5 @@ SUBCOMMANDS:
     get_transaction_info_by_id    Like get_transaction_by_id but more detailed
     help                          Prints this message or the help of the given subcommand(s)
     list_nodes                    List Nodes
+
 ```

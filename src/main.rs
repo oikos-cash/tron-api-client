@@ -67,6 +67,10 @@ async fn main() {
             (about: "Get Account")
             (@arg address: +required "Address (hex format)")
         )
+        (@subcommand get_account_net =>
+            (about: "Get Account Bandwidth")
+            (@arg address: +required "Address (hex format)")
+        )
         (@subcommand get_transaction_by_id =>
             (about: "Get Transaction by Id")
             (@arg id: +required "Transaction ID")
@@ -131,6 +135,14 @@ async fn main() {
                 value_t!(submatches, "address", String).unwrap_or_else(|e| e.exit());
             let address = Address::Hex(address);
             let res = client.get_account(address).await.unwrap();
+            println!("{}", serde_json::to_string_pretty(&res).unwrap());
+        }
+        "get_account_net" => {
+            let submatches = submatches.unwrap();
+            let address: String =
+                value_t!(submatches, "address", String).unwrap_or_else(|e| e.exit());
+            let address = Address::Hex(address);
+            let res = client.get_account_net(address).await.unwrap();
             println!("{}", serde_json::to_string_pretty(&res).unwrap());
         }
         "get_transaction_by_id" => {

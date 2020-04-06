@@ -1,4 +1,5 @@
 pub mod account;
+pub mod account_net;
 pub mod block;
 pub mod chain_parameters;
 pub mod error;
@@ -9,6 +10,7 @@ pub mod transaction_info;
 pub mod tron_contract;
 
 pub use account::Account;
+pub use account_net::AccountNet;
 pub use block::Block;
 pub use chain_parameters::ChainParameters;
 pub use error::Error;

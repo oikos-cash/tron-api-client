@@ -77,6 +77,18 @@ async fn get_account() {
 }
 
 #[tokio::test]
+async fn get_account_net() {
+    let client = get_client();
+
+    let info = client
+        .get_account_net(Address::Hex(
+            "41E552F6487585C2B58BC2C9BB4492BC1F17132CD0".into(),
+        ))
+        .await
+        .expect("Error fetching account");
+}
+
+#[tokio::test]
 async fn get_account_2() {
     let client = get_client();
 

@@ -1,7 +1,8 @@
 use crate::error::{Error, Result};
 use crate::params::*;
 use crate::response::{
-    Account, Block, ChainParameters, Contract, NodeInfo, NodeList, Transaction, TransactionInfo,
+    Account, AccountNet, Block, ChainParameters, Contract, NodeInfo, NodeList, Transaction,
+    TransactionInfo,
 };
 use reqwest::{Client as HttpClient, Method, RequestBuilder, Response};
 use serde::{de::DeserializeOwned, Serialize};
@@ -165,6 +166,11 @@ impl Client {
 
     pub async fn get_account(&self, address: Address) -> Result<Account> {
         self.post("/walletsolidity/getaccount", GetAccountParams::new(address))
+            .await
+    }
+
+    pub async fn get_account_net(&self, address: Address) -> Result<AccountNet> {
+        self.post("/wallet/getaccountnet", GetAccountParams::new(address))
             .await
     }
 
