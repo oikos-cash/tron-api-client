@@ -2,8 +2,8 @@
 
 [![crates.io](https://meritbadge.herokuapp.com/tron_api_client)](https://crates.io/crates/tron-api-client)
 [![documentation](https://docs.rs/tron-api-client/badge.svg)](https://docs.rs/tron-api-client)
-[![Build Status](https://travis-ci.org/kevholder/tron-api-client.svg?branch=master)](https://travis-ci.org/kevholder/tron-api-client)
-[![Build Status Appveyor](https://ci.appveyor.com/api/projects/status/github/kevholder/tron-api-client)](https://ci.appveyor.com/project/kevholder/tron-api-client)
+[![Build Status](https://travis-ci.org/oikos-cash/tron-api-client.svg?branch=master)](https://travis-ci.org/oikos-cash/tron-api-client)
+[![Build Status Appveyor](https://ci.appveyor.com/api/projects/status/github/oikos-cash/tron-api-client)](https://ci.appveyor.com/project/oikos-cash/tron-api-client)
 
 _WORK IN PROGRESS (alpha)_
 
@@ -11,7 +11,7 @@ A Rust library for Tron's HTTP APIs.
 
 ## Install
 
-See [releases](https://github.com/kevholder/tron-api-client/releases).
+See [releases](https://github.com/oikos-cash/tron-api-client/releases).
 
 If you have Rust: `cargo install tron-api-client`.
 
