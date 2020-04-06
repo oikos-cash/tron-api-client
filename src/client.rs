@@ -1,8 +1,8 @@
 use crate::error::{Error, Result};
 use crate::params::*;
 use crate::response::{
-    Account, AccountNet, Block, ChainParameters, Contract, NodeInfo, NodeList, Transaction,
-    TransactionInfo,
+    Account, AccountNet, Block, BlockList, ChainParameters, Contract, NodeInfo, NodeList,
+    Transaction, TransactionInfo,
 };
 use reqwest::{Client as HttpClient, Method, RequestBuilder, Response};
 use serde::{de::DeserializeOwned, Serialize};
@@ -149,6 +149,12 @@ impl Client {
 
     pub async fn get_now_block(&self) -> Result<Block> {
         self.post("/wallet/getnowblock", EmptyBody::default()).await
+    }
+
+    // num is the number of blocks to query (not the block height)
+    pub async fn get_block_by_latest_num(&self, num: u64) -> Result<BlockList> {
+        self.post("/wallet/getblockbylatestnum", GetBlockByNumParams::new(num))
+            .await
     }
 
     // TODO:

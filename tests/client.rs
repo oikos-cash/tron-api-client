@@ -9,7 +9,12 @@ use tron_api_client::{Address, Client, TxId};
 // use data::*;
 
 fn get_client() -> Client {
-    let client = Client::new("https://api.shasta.trongrid.io".into());
+    let client = Client::for_shasta();
+    client
+}
+
+fn get_client_main() -> Client {
+    let client = Client::for_main();
     client
 }
 
@@ -41,6 +46,17 @@ async fn get_block_by_num() {
         .await
         .expect("Error fetching block by num");
     // dbg!(info);
+}
+
+#[tokio::test]
+async fn get_block_by_latest_num() {
+    let client = get_client();
+
+    let info = client
+        .get_block_by_latest_num(10)
+        .await
+        .expect("Error fetching block by num");
+    dbg!(info);
 }
 
 #[tokio::test]
@@ -77,8 +93,20 @@ async fn get_account() {
 }
 
 #[tokio::test]
-async fn get_account_net() {
+async fn get_account_2() {
     let client = get_client();
+
+    let info = client
+        .get_account(Address::Hex(
+            "41a8a07f09def5e6a4462df90068c11abf6224e865".into(),
+        ))
+        .await
+        .expect("Error fetching account");
+}
+
+#[tokio::test]
+async fn get_account_net() {
+    let client = get_client_main();
 
     let info = client
         .get_account_net(Address::Hex(
@@ -89,11 +117,11 @@ async fn get_account_net() {
 }
 
 #[tokio::test]
-async fn get_account_2() {
+async fn get_account_net2() {
     let client = get_client();
 
     let info = client
-        .get_account(Address::Hex(
+        .get_account_net(Address::Hex(
             "41a8a07f09def5e6a4462df90068c11abf6224e865".into(),
         ))
         .await

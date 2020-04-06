@@ -18,7 +18,7 @@ If you have Rust: `cargo install tron-api-client`.
 ## Usage
 
 ```bash
-tron 0.0.4-alpha.0
+tron 0.0.4
 Tron API client and CLI
 
 USAGE:
@@ -29,13 +29,14 @@ FLAGS:
     -V, --version    Prints version information
 
 OPTIONS:
-        --network <network>    Specify tron network (uses trongrid.io) [env: TRON_NETWORK=]  [default: main]  [possible
-                               values: main, shasta]
+        --network <network>    Specify tron network (uses trongrid.io) [env: TRON_NETWORK=shasta]  [default: main]
+                               [possible values: main, shasta]
 
 SUBCOMMANDS:
     get_account                   Get Account
     get_account_net               Get Account Bandwidth
     get_block_by_id               Get Block by Id
+    get_block_by_latest_num       Get <num> Latest Blocks
     get_block_by_num              Get Block by Number
     get_chain_parameters          Get Chain Parameters
     get_contract                  Get Contract
@@ -45,5 +46,4 @@ SUBCOMMANDS:
     get_transaction_info_by_id    Like get_transaction_by_id but more detailed
     help                          Prints this message or the help of the given subcommand(s)
     list_nodes                    List Nodes
-
 ```

@@ -56,6 +56,10 @@ async fn main() {
             (about: "Get Block by Number")
             (@arg num: +required "Block Number")
         )
+        (@subcommand get_block_by_latest_num =>
+            (about: "Get <num> Latest Blocks")
+            (@arg num: +required "Number of blocks to fetch")
+        )
         (@subcommand get_block_by_id =>
             (about: "Get Block by Id")
             (@arg id: +required "Block Id")
@@ -117,6 +121,12 @@ async fn main() {
             let submatches = submatches.unwrap();
             let num: u64 = value_t!(submatches, "num", u64).unwrap_or_else(|e| e.exit());
             let res = client.get_block_by_num(num).await.unwrap();
+            println!("{}", serde_json::to_string_pretty(&res).unwrap());
+        }
+        "get_block_by_latest_num" => {
+            let submatches = submatches.unwrap();
+            let num: u64 = value_t!(submatches, "num", u64).unwrap_or_else(|e| e.exit());
+            let res = client.get_block_by_latest_num(num).await.unwrap();
             println!("{}", serde_json::to_string_pretty(&res).unwrap());
         }
         "get_block_by_id" => {

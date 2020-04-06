@@ -1,6 +1,7 @@
 pub mod account;
 pub mod account_net;
 pub mod block;
+pub mod block_list;
 pub mod chain_parameters;
 pub mod error;
 pub mod node_info;
@@ -12,6 +13,7 @@ pub mod tron_contract;
 pub use account::Account;
 pub use account_net::AccountNet;
 pub use block::Block;
+pub use block_list::BlockList;
 pub use chain_parameters::ChainParameters;
 pub use error::Error;
 pub use node_info::NodeInfo;
