@@ -2,7 +2,7 @@ use crate::error::{Error, Result};
 use crate::params::*;
 use crate::response::{
     Account, AccountNet, Block, BlockList, ChainParameters, Contract, NodeInfo, NodeList,
-    Transaction, TransactionInfo,
+    Transaction, TransactionInfo, WitnessList,
 };
 use reqwest::{Client as HttpClient, Method, RequestBuilder, Response};
 use serde::{de::DeserializeOwned, Serialize};
@@ -131,6 +131,10 @@ impl Client {
 
     pub async fn list_nodes(&self) -> Result<NodeList> {
         self.get("/wallet/listnodes").await
+    }
+
+    pub async fn list_witnesses(&self) -> Result<WitnessList> {
+        self.get("/walletsolidity/listwitnesses").await
     }
 
     pub async fn get_chain_parameters(&self) -> Result<ChainParameters> {

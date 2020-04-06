@@ -38,6 +38,17 @@ async fn node_list() {
 }
 
 #[tokio::test]
+async fn list_witnesses() {
+    let client = get_client();
+
+    let info = client
+        .list_witnesses()
+        .await
+        .expect("Error fetching node list");
+    dbg!(info);
+}
+
+#[tokio::test]
 async fn get_block_by_num() {
     let client = get_client();
 

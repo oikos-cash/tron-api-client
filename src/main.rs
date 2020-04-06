@@ -92,6 +92,9 @@ async fn main() {
             (about: "Get Contract")
             (@arg address: +required "Contract Address (hex format)")
         )
+        (@subcommand list_witnesses =>
+            (about: "List Witnesses")
+        )
     )
     .setting(clap::AppSettings::SubcommandRequiredElseHelp);
 
@@ -187,6 +190,11 @@ async fn main() {
                 value_t!(submatches, "address", String).unwrap_or_else(|e| e.exit());
             let address = Address::Hex(address);
             let res = client.get_contract(address).await.unwrap();
+            println!("{}", serde_json::to_string_pretty(&res).unwrap());
+        }
+        "list_witnesses" => {
+            // TODO: handle errors
+            let res = client.list_witnesses().await.unwrap();
             println!("{}", serde_json::to_string_pretty(&res).unwrap());
         }
         _ => unimplemented!(),

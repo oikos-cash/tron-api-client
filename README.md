@@ -18,7 +18,7 @@ If you have Rust: `cargo install tron-api-client`.
 ## Usage
 
 ```bash
-tron 0.0.5
+tron 0.0.4
 Tron API client and CLI
 
 USAGE:
@@ -47,4 +47,5 @@ SUBCOMMANDS:
     get_transaction_info_by_id    Like get_transaction_by_id but more detailed
     help                          Prints this message or the help of the given subcommand(s)
     list_nodes                    List Nodes
+    list_witnesses                List Witnesses
 ```
