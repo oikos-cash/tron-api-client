@@ -34,7 +34,7 @@ async fn node_list() {
     let client = get_client();
 
     let info = client.list_nodes().await.expect("Error fetching node list");
-    dbg!(info);
+    // dbg!(info);
 }
 
 #[tokio::test]
@@ -53,9 +53,20 @@ async fn get_block_by_latest_num() {
     let client = get_client();
 
     let info = client
-        .get_block_by_latest_num(10)
+        .get_block_by_latest_num(3)
         .await
-        .expect("Error fetching block by num");
+        .expect("Error fetching num latest blocks");
+    // dbg!(info);
+}
+
+#[tokio::test]
+async fn get_block_by_limit_next() {
+    let client = get_client();
+
+    let info = client
+        .get_block_by_limit_next(1_000_000, 1_000_003)
+        .await
+        .expect("Error fetching block by limit next");
     dbg!(info);
 }
 

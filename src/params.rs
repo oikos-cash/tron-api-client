@@ -18,6 +18,19 @@ impl GetBlockByNumParams {
 
 #[derive(Debug, Default, Serialize)]
 #[serde(rename_all = "camelCase")]
+pub struct GetBlockByRangeParams {
+    start_num: u64,
+    end_num: u64,
+}
+
+impl GetBlockByRangeParams {
+    pub fn new(start_num: u64, end_num: u64) -> GetBlockByRangeParams {
+        GetBlockByRangeParams { start_num, end_num }
+    }
+}
+
+#[derive(Debug, Default, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct GetBlockByIdParams {
     #[serde(rename = "value")]
     id: String,

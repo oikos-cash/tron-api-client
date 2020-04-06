@@ -157,6 +157,14 @@ impl Client {
             .await
     }
 
+    pub async fn get_block_by_limit_next(&self, start_num: u64, end_num: u64) -> Result<BlockList> {
+        self.post(
+            "/wallet/getblockbylimitnext",
+            GetBlockByRangeParams::new(start_num, end_num),
+        )
+        .await
+    }
+
     // TODO:
     // walletgetblockbylatestnum
     // getblockbylimitnext
