@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/oikos-cash/tron-api-client.svg?branch=master)](https://travis-ci.org/oikos-cash/tron-api-client)
 [![Build Status Appveyor](https://ci.appveyor.com/api/projects/status/github/oikos-cash/tron-api-client)](https://ci.appveyor.com/project/oikos-cash/tron-api-client)
 
-_WORK IN PROGRESS (alpha)_
+**WORK IN PROGRESS**
 
 A Rust library for Tron's HTTP APIs.
 
