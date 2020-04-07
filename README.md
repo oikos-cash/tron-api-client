@@ -18,7 +18,7 @@ If you have Rust: `cargo install tron-api-client`.
 ## Usage
 
 ```bash
-tron 0.0.4
+tron 0.0.5
 Tron API client and CLI
 
 USAGE:
@@ -35,6 +35,7 @@ OPTIONS:
 SUBCOMMANDS:
     get_account                   Get Account
     get_account_net               Get Account Bandwidth
+    get_asset_issue_list          List TRC10 Tokens
     get_block_by_id               Get Block by Id
     get_block_by_latest_num       Get <num> Latest Blocks
     get_block_by_limit_next       Get Range of Blocks

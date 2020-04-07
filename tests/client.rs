@@ -217,3 +217,13 @@ async fn get_contract() {
         .await
         .expect("Error fetching contract");
 }
+
+#[tokio::test]
+async fn get_asset_issue_list() {
+    let client = get_client();
+
+    let info = client
+        .get_asset_issue_list()
+        .await
+        .expect("Error fetching asset issue list");
+}

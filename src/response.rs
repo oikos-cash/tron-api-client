@@ -1,5 +1,6 @@
 pub mod account;
 pub mod account_net;
+pub mod asset_issue_list;
 pub mod block;
 pub mod block_list;
 pub mod chain_parameters;
@@ -13,6 +14,7 @@ pub mod witness_list;
 
 pub use account::Account;
 pub use account_net::AccountNet;
+pub use asset_issue_list::AssetIssueList;
 pub use block::Block;
 pub use block_list::BlockList;
 pub use chain_parameters::ChainParameters;

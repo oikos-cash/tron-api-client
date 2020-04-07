@@ -95,6 +95,9 @@ async fn main() {
         (@subcommand list_witnesses =>
             (about: "List Witnesses")
         )
+        (@subcommand get_asset_issue_list =>
+            (about: "List TRC10 Tokens")
+        )
     )
     .setting(clap::AppSettings::SubcommandRequiredElseHelp);
 
@@ -195,6 +198,11 @@ async fn main() {
         "list_witnesses" => {
             // TODO: handle errors
             let res = client.list_witnesses().await.unwrap();
+            println!("{}", serde_json::to_string_pretty(&res).unwrap());
+        }
+        "get_asset_issue_list" => {
+            // TODO: handle errors
+            let res = client.get_asset_issue_list().await.unwrap();
             println!("{}", serde_json::to_string_pretty(&res).unwrap());
         }
         _ => unimplemented!(),

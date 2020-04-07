@@ -1,8 +1,8 @@
 use crate::error::{Error, Result};
 use crate::params::*;
 use crate::response::{
-    Account, AccountNet, Block, BlockList, ChainParameters, Contract, NodeInfo, NodeList,
-    Transaction, TransactionInfo, WitnessList,
+    Account, AccountNet, AssetIssueList, Block, BlockList, ChainParameters, Contract, NodeInfo,
+    NodeList, Transaction, TransactionInfo, WitnessList,
 };
 use reqwest::{Client as HttpClient, Method, RequestBuilder, Response};
 use serde::{de::DeserializeOwned, Serialize};
@@ -212,6 +212,13 @@ impl Client {
 
     pub async fn get_contract(&self, address: Address) -> Result<Contract> {
         self.post("/wallet/getcontract", GetContractParams::new(address))
+            .await
+    }
+
+    // TRC10
+    //  https://api.trongrid.io/walletsolidity/getassetissuelist
+    pub async fn get_asset_issue_list(&self) -> Result<AssetIssueList> {
+        self.post("/walletsolidity/getassetissuelist", EmptyBody::default())
             .await
     }
 }
