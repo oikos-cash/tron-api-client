@@ -43,6 +43,11 @@ async fn main() {
              env("TRON_NETWORK")
             +takes_value
             "Specify tron network (uses trongrid.io)")
+        (@arg api_url:
+            --api
+            env("TRON_API")
+            +takes_value
+            "Directly specify Tron API URL")
         (@subcommand get_node_info =>
             (about: "Get Node Info")
         )
@@ -106,10 +111,14 @@ async fn main() {
     let (command_name, submatches) = matches.subcommand();
 
     // TODO: configurable!
-    let client = match matches.value_of("network").unwrap() {
-        "main" => Client::for_main(),
-        "shasta" => Client::for_shasta(),
-        _ => unimplemented!(),
+    let client = match (
+        matches.value_of("api_url"),
+        matches.value_of("network").unwrap(),
+    ) {
+        (None, "main") => Client::for_main(),
+        (None, "shasta") => Client::for_shasta(),
+        (Some(api_url), _) => Client::new(api_url.to_string()),
+        (_, _) => unimplemented!(),
     };
 
     match command_name {
